@@ -1,0 +1,51 @@
+<!-- views/login.ejs - Host login page -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Host Login - Union Circle Calendar</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Union Circle Calendar - Pokemon Legends</h1>
+      <nav>
+        <ul>
+          <li><a href="/">Calendar</a></li>
+          <li><a href="/subscribe">Subscribe</a></li>
+          <li><a href="/login" class="active">Host Login</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="form-container">
+      <h2>Host Login</h2>
+      <% if (typeof error !== 'undefined') { %>
+        <div class="alert alert-error"><%= error %></div>
+      <% } %>
+      <form action="/login" method="POST">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+      </form>
+      <p>Not registered? <a href="/register">Create a host account</a>.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; <%= new Date().getFullYear() %> Union Circle Calendar. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

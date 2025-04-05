@@ -1,0 +1,82 @@
+<!-- views/subscribe.ejs - SMS subscription form with carrier selection -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subscribe to Notifications - Union Circle Calendar</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Union Circle Calendar - Pokemon Legends</h1>
+      <nav>
+        <ul>
+          <li><a href="/">Calendar</a></li>
+          <li><a href="/subscribe" class="active">Subscribe</a></li>
+          <li><a href="/login">Host Login</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="form-container">
+      <h2>Subscribe to Text Notifications</h2>
+      <p>Get text message alerts when new Union Circle events are scheduled and one hour before they start.</p>
+      
+      <% if (typeof error !== 'undefined') { %>
+        <div class="alert alert-error"><%= error %></div>
+      <% } %>
+      
+      <form action="/subscribe" method="POST">
+        <div class="form-group">
+          <label for="phoneNumber">Phone Number</label>
+          <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="+1 (123) 456-7890" required>
+          <small>We'll only use this to send you notifications about Union Circle events.</small>
+        </div>
+        
+        <div class="form-group">
+          <label for="carrier">Mobile Carrier</label>
+          <select id="carrier" name="carrier" required>
+            <option value="">Select your carrier...</option>
+            <option value="verizon">Verizon</option>
+            <option value="att">AT&amp;T</option>
+            <option value="tmobile">T-Mobile</option>
+            <option value="sprint">Sprint</option>
+            <option value="boost">Boost Mobile</option>
+            <option value="cricket">Cricket</option>
+            <option value="uscellular">US Cellular</option>
+            <option value="virgin">Virgin Mobile</option>
+            <option value="metro">Metro by T-Mobile</option>
+            <option value="xfinity">Xfinity Mobile</option>
+            <option value="straight">Straight Talk</option>
+            <option value="consumer">Consumer Cellular</option>
+            <option value="google">Google Fi</option>
+            <option value="republic">Republic Wireless</option>
+          </select>
+          <small>We need to know your carrier to send you text messages.</small>
+        </div>
+        
+        <div class="form-group">
+          <div class="checkbox-container">
+            <input type="checkbox" id="consent" name="consent" required>
+            <label for="consent">I agree to receive text messages about Union Circle events.</label>
+          </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Subscribe</button>
+      </form>
+      
+      <p>Already subscribed? <a href="/unsubscribe">Unsubscribe here</a>.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; <%= new Date().getFullYear() %> Union Circle Calendar. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

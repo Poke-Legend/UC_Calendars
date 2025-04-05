@@ -1,0 +1,104 @@
+<!-- views/dashboard.ejs - Host dashboard -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Host Dashboard - Union Circle Calendar</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Union Circle Calendar - Pokemon Legends</h1>
+      <nav>
+        <ul>
+          <li><a href="/">Calendar</a></li>
+          <li><a href="/subscribe">Subscribe</a></li>
+          <li><a href="/dashboard" class="active">Dashboard</a></li>
+          <li><a href="/logout">Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="dashboard-header">
+      <div>
+        <h2>Host Dashboard</h2>
+        <div class="host-rank">
+          <p>Your rank: <strong><%= hostRank %></strong></p>
+          <% if (!canCreateEvents) { %>
+            <p class="rank-warning">You need to be a ranked hoster to create events.</p>
+          <% } %>
+        </div>
+      </div>
+      
+      <% if (canCreateEvents) { %>
+        <a href="/events/new" class="btn btn-primary">Create New Event</a>
+      <% } else { %>
+        <button class="btn btn-disabled" disabled title="You need to be a ranked hoster to create events">Create New Event</button>
+      <% } %>
+    </section>
+
+    <section class="events-list">
+      <h3>Your Events</h3>
+      <% if (events.length > 0) { %>
+        <table class="events-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% events.forEach(event => { %>
+              <tr>
+                <td><%= event.title %></td>
+                <td><%= event.formattedDate %></td>
+                <td><%= event.formattedStartTime %> - <%= event.formattedEndTime %></td>
+                <td class="actions">
+                  <% if (canCreateEvents) { %>
+                    <a href="/events/<%= event.id %>/edit" class="btn btn-sm btn-secondary">Edit</a>
+                    <form action="/events/<%= event.id %>/delete" method="POST" class="inline-form">
+                      <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                  <% } else { %>
+                    <span class="disabled-text">Ranked hoster required</span>
+                  <% } %>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      <% } else { %>
+        <p>You haven't created any events yet.</p>
+        <% if (!canCreateEvents) { %>
+          <p>You need to be a ranked hoster to create events.</p>
+        <% } %>
+      <% } %>
+    </section>
+    
+    <% if (!canCreateEvents) { %>
+    <section class="rank-info-section">
+      <h3>How to Become a Ranked Hoster</h3>
+      <p>To create and manage Union Circle events, you need to be a ranked hoster. To get this rank:</p>
+      <ol>
+        <li>Be an active participant in Union Circles</li>
+        <li>Demonstrate knowledge of Pokemon Legends gameplay</li>
+        <li>Have a positive reputation in the community</li>
+      </ol>
+      <p>Contact an administrator to request a rank upgrade once you meet these requirements.</p>
+    </section>
+    <% } %>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; <%= new Date().getFullYear() %> Union Circle Calendar. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

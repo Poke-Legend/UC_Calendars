@@ -1,0 +1,51 @@
+<!-- views/unsubscribe.ejs - Unsubscribe form -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unsubscribe from Notifications - Union Circle Calendar</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Union Circle Calendar - Pokemon Legends</h1>
+      <nav>
+        <ul>
+          <li><a href="/">Calendar</a></li>
+          <li><a href="/subscribe">Subscribe</a></li>
+          <li><a href="/login">Host Login</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="form-container">
+      <h2>Unsubscribe from Text Notifications</h2>
+      
+      <% if (typeof error !== 'undefined') { %>
+        <div class="alert alert-error"><%= error %></div>
+      <% } %>
+      
+      <form action="/unsubscribe" method="POST">
+        <div class="form-group">
+          <label for="phoneNumber">Phone Number</label>
+          <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="+1 (123) 456-7890" required>
+        </div>
+        
+        <button type="submit" class="btn btn-danger">Unsubscribe</button>
+      </form>
+      
+      <p><a href="/subscribe">Return to subscription page</a></p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; <%= new Date().getFullYear() %> Union Circle Calendar. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

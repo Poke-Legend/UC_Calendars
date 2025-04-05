@@ -1,0 +1,179 @@
+<!-- views/event-form.ejs - Create new event with time format fixes -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Event - Union Circle Calendar</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    .form-tip {
+      background-color: #f8f9fa;
+      border-left: 4px solid #4b6cb7;
+      padding: 10px 15px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+    }
+    
+    .tip-icon {
+      color: #4b6cb7;
+      font-style: normal;
+      font-weight: bold;
+      margin-right: 5px;
+    }
+    
+    input[type="time"] {
+      padding: 0.8rem;
+      font-family: inherit;
+      font-size: 1rem;
+    }
+    
+    small {
+      color: #666;
+      font-size: 0.8rem;
+      margin-top: 0.25rem;
+      display: block;
+    }
+    
+    .time-preview {
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      background-color: #f0f8ff;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Union Circle Calendar - Pokemon Legends</h1>
+      <nav>
+        <ul>
+          <li><a href="/">Calendar</a></li>
+          <li><a href="/dashboard">Dashboard</a></li>
+          <li><a href="/logout">Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="form-container">
+      <h2>Create New Union Circle Event</h2>
+      
+      <!-- Time format tip -->
+      <div class="form-info">
+        <p class="form-tip">
+          <i class="tip-icon">ⓘ</i> 
+          Time is in 12-hour format. Please select AM or PM correctly.
+        </p>
+      </div>
+      
+      <form action="/events" method="POST">
+        <div class="form-group">
+          <label for="title">Event Title</label>
+          <input type="text" id="title" name="title" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" name="description" rows="4"></textarea>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group half">
+            <label for="startDate">Start Date</label>
+            <input type="date" id="startDate" name="startDate" required>
+          </div>
+          
+          <div class="form-group half">
+            <label for="startTime">Start Time (12-hour format)</label>
+            <input type="time" id="startTime" name="startTime" required>
+            <small>Example: 11:00 AM, 01:30 PM, etc.</small>
+            <div class="time-preview" id="startTimePreview"></div>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group half">
+            <label for="endDate">End Date</label>
+            <input type="date" id="endDate" name="endDate" required>
+          </div>
+          
+          <div class="form-group half">
+            <label for="endTime">End Time (12-hour format)</label>
+            <input type="time" id="endTime" name="endTime" required>
+            <small>Example: 11:00 AM, 01:30 PM, etc.</small>
+            <div class="time-preview" id="endTimePreview"></div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="location">Location in Pokemon Legends</label>
+          <input type="text" id="location" name="location" placeholder="e.g., Jubilife Village">
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Create Event</button>
+        <a href="/dashboard" class="btn btn-secondary">Cancel</a>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; <%= new Date().getFullYear() %> Union Circle Calendar. All rights reserved.</p>
+    </div>
+  </footer>
+  
+  <script>
+    // Set default dates and add time preview
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set default dates to today
+      const today = new Date();
+      const formattedDate = today.toISOString().substr(0, 10);
+      
+      document.getElementById('startDate').value = formattedDate;
+      document.getElementById('endDate').value = formattedDate;
+      
+      // Helper function to format time in 12-hour format
+      function formatTime(timeString) {
+        if (!timeString) return '';
+        
+        const [hours, minutes] = timeString.split(':');
+        const hour = parseInt(hours, 10);
+        const ampm = hour >= 12 ? 'PM' : 'AM';
+        const hour12 = hour % 12 || 12;
+        
+        return `${hour12}:${minutes} ${ampm}`;
+      }
+      
+      // Add time preview functionality
+      const startTime = document.getElementById('startTime');
+      const endTime = document.getElementById('endTime');
+      const startTimePreview = document.getElementById('startTimePreview');
+      const endTimePreview = document.getElementById('endTimePreview');
+      
+      // Update preview when time changes
+      startTime.addEventListener('change', function() {
+        startTimePreview.textContent = `Display as: ${formatTime(this.value)}`;
+      });
+      
+      endTime.addEventListener('change', function() {
+        endTimePreview.textContent = `Display as: ${formatTime(this.value)}`;
+      });
+      
+      // Set default times
+      const defaultStartTime = '11:00'; // 11:00 AM
+      const defaultEndTime = '12:00';   // 12:00 PM
+      
+      startTime.value = defaultStartTime;
+      endTime.value = defaultEndTime;
+      
+      // Initialize previews
+      startTimePreview.textContent = `Display as: ${formatTime(defaultStartTime)}`;
+      endTimePreview.textContent = `Display as: ${formatTime(defaultEndTime)}`;
+    });
+  </script>
+</body>
+</html>

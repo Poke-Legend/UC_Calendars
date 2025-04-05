@@ -1,0 +1,54 @@
+<!-- views/rank-required.ejs - Permission denied page -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ranked Hoster Required - Union Circle Calendar</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Union Circle Calendar - Pokemon Legends</h1>
+      <nav>
+        <ul>
+          <li><a href="/">Calendar</a></li>
+          <li><a href="/subscribe">Subscribe</a></li>
+          <li><a href="/dashboard">Dashboard</a></li>
+          <li><a href="/logout">Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="form-container">
+      <div class="alert alert-error">
+        <h2>Ranked Hoster Required</h2>
+        <p>You need to be a ranked hoster to create and manage Union Circle events.</p>
+        <p>Your current rank: <strong><%= currentRank %></strong></p>
+      </div>
+      
+      <div class="rank-info">
+        <h3>How to Become a Ranked Hoster</h3>
+        <p>To become a ranked hoster, you need to meet the following requirements:</p>
+        <ul>
+          <li>Be an active participant in Union Circles</li>
+          <li>Demonstrate knowledge of Pokemon Legends gameplay</li>
+          <li>Have a positive reputation in the community</li>
+        </ul>
+        <p>Contact an administrator to request a rank upgrade once you meet these requirements.</p>
+      </div>
+      
+      <a href="/dashboard" class="btn btn-primary">Return to Dashboard</a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; <%= new Date().getFullYear() %> Union Circle Calendar. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

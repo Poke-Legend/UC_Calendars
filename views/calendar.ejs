@@ -1,0 +1,153 @@
+<!-- views/calendar.ejs - Public calendar view without time display in calendar -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Union Circle Calendar</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css">
+  <style>
+    /* Additional styles for better event display */
+    .event-hours {
+      font-weight: bold;
+      color: #4b6cb7;
+    }
+    
+    .event-card {
+      transition: background-color 0.3s ease;
+    }
+    
+    .event-card.highlight {
+      background-color: #f0f8ff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Union Circle Calendar - Pokemon Legends</h1>
+      <nav>
+        <ul>
+          <li><a href="/" class="active">Calendar</a></li>
+          <li><a href="/subscribe">Subscribe</a></li>
+          <% if (isAuthenticated) { %>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/logout">Logout (<%= currentUser %>)</a></li>
+          <% } else { %>
+            <li><a href="/login">Host Login</a></li>
+          <% } %>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="calendar-section">
+      <h2>Upcoming Union Circle Events</h2>
+      <div id="calendar"></div>
+    </section>
+
+    <section class="events-list">
+      <h2>Upcoming Events</h2>
+      <% if (events.length > 0) { %>
+        <ul class="event-cards">
+          <% events.forEach(event => { %>
+            <li class="event-card" id="event-<%= event.id %>">
+              <!-- Use the formatted date and time -->
+              <div class="event-time">
+                <div class="event-date"><%= event.formattedDate %></div>
+                <div class="event-hours"><%= event.formattedStartTime %> - <%= event.formattedEndTime %></div>
+              </div>
+              <h3><%= event.title %></h3>
+              <div class="event-host">Hosted by: <%= event.host_username %></div>
+              <% if (event.description) { %>
+                <p><%= event.description %></p>
+              <% } %>
+              <div class="event-location">Location: <%= event.location || 'Pokemon Legends' %></div>
+            </li>
+          <% }); %>
+        </ul>
+      <% } else { %>
+        <p>No upcoming events. Check back later!</p>
+      <% } %>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; <%= new Date().getFullYear() %> Union Circle Calendar. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const calendarEl = document.getElementById('calendar');
+      
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,listWeek'
+        },
+        // Critical timezone settings
+        timeZone: 'local',
+        // Disable time display on calendar
+        displayEventTime: false,  // This removes the time from the calendar display
+        events: [
+          <% events.forEach(event => { %>
+            {
+              id: '<%= event.id %>',
+              title: '<%= event.title %>',  // Only show the title on the calendar
+              start: '<%= new Date(event.start_time).toISOString() %>',
+              end: '<%= new Date(event.end_time).toISOString() %>',
+              allDay: false,
+              url: '#event-<%= event.id %>',
+              extendedProps: {
+                description: '<%= event.description %>',
+                host: '<%= event.host_username %>'
+              }
+            },
+          <% }); %>
+        ],
+        eventClick: function(info) {
+          info.jsEvent.preventDefault();
+          
+          // Get the element to scroll to
+          const elementId = info.event.url.substring(1); // Remove the # from the URL
+          const element = document.getElementById(elementId);
+          
+          if (element) {
+            // Remove any existing highlights
+            document.querySelectorAll('.event-card.highlight').forEach(el => {
+              el.classList.remove('highlight');
+            });
+            
+            // Smooth scroll to the element
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Highlight the element
+            element.classList.add('highlight');
+            
+            // Remove highlight after 3 seconds
+            setTimeout(function() {
+              element.classList.remove('highlight');
+            }, 3000);
+          }
+        },
+        // Additional calendar options for better display
+        dayMaxEvents: true, // When too many events, show "+more" link
+        firstDay: 0, // Start week on Sunday
+        eventDisplay: 'block', // Display as blocks rather than dots
+        eventColor: '#4b6cb7', // Match the time color in the event list
+        eventTextColor: 'white',
+        eventBorderColor: '#3a5696'
+      });
+      
+      calendar.render();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!-- views/admin-hosts.ejs - Admin page to manage hosts -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Hosts - Union Circle Calendar</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Union Circle Calendar - Pokemon Legends</h1>
+      <nav>
+        <ul>
+          <li><a href="/">Calendar</a></li>
+          <li><a href="/dashboard">Dashboard</a></li>
+          <li><a href="/admin/hosts" class="active">Manage Hosts</a></li>
+          <li><a href="/logout">Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="dashboard-header">
+      <h2>Manage Hosts</h2>
+    </section>
+
+    <section class="hosts-list">
+      <table class="events-table">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Current Rank</th>
+            <th>Can Create Events</th>
+            <th>Events Created</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% hosts.forEach(host => { %>
+            <tr>
+              <td><%= host.username %></td>
+              <td><%= host.email %></td>
+              <td><%= host.rank %></td>
+              <td><%= host.can_create_events ? 'Yes' : 'No' %></td>
+              <td><%= host.event_count %></td>
+              <td>
+                <form action="/admin/hosts/<%= host.id %>/rank" method="POST" class="inline-form">
+                  <select name="newRank" required>
+                    <option value="">Change rank...</option>
+                    <% ranks.forEach(rank => { %>
+                      <option value="<%= rank.rank_name %>" <%= host.rank === rank.rank_name ? 'disabled' : '' %>><%= rank.rank_name %></option>
+                    <% }); %>
+                  </select>
+                  <button type="submit" class="btn btn-sm btn-secondary">Update</button>
+                </form>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </section>
+    
+    <section class="rank-management">
+      <h3>Rank Descriptions</h3>
+      <table class="events-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Can Create Events</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% ranks.forEach(rank => { %>
+            <tr>
+              <td><%= rank.rank_name %></td>
+              <td><%= rank.can_create_events ? 'Yes' : 'No' %></td>
+              <td><%= rank.description %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; <%= new Date().getFullYear() %> Union Circle Calendar. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
